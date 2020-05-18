@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import { useSpring, animated, interpolate } from 'react-spring';
+
 import { Form, Input } from '@rocketseat/unform';
 
 import { Container, Content } from './styles';
@@ -8,6 +10,7 @@ export default function Main() {
   const [result, setResult] = useState(0);
   const [totalInvested, setTotalInvested] = useState(0);
   const [earnings, setEarnings] = useState(0);
+  const [resultIsVisible, setResultIsVisible] = useState(false);
 
   function handleSubmit(data) {
     const { start, monthly, time, rentability } = data;
@@ -24,6 +27,10 @@ export default function Main() {
       parseFloat((futureValueWithoutMonthly + monthlyValue).toFixed(2))
     );
   }
+
+  const opacityProps = useSpring({
+    opacity: resultIsVisible ? 1 : 0,
+  });
 
   return (
     <Container>
@@ -53,7 +60,7 @@ export default function Main() {
             autoComplete="off"
           />
 
-          <label htmlFor="time">Por quanto tempo?</label>
+          <label htmlFor="time">Por quantos meses?</label>
           <Input
             type="number"
             name="time"
@@ -63,7 +70,7 @@ export default function Main() {
           />
 
           <label htmlFor="rentability">
-            Qual a rentabilidade média esperada ao ano?
+            Qual a rentabilidade média esperada ao mês?
           </label>
           <Input
             // type="number"
@@ -73,10 +80,17 @@ export default function Main() {
             autoComplete="off"
           />
 
-          <button type="submit">Calcular</button>
+          <button
+            type="submit"
+            onClick={() => setResultIsVisible(!resultIsVisible)}
+          >
+            Calcular
+          </button>
         </Form>
 
-        <h1>Resultado {result}</h1>
+        <animated.div className="result" style={opacityProps}>
+          <h1>Resultado {result}</h1>
+        </animated.div>
       </Content>
     </Container>
   );

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { useSpring, animated, interpolate } from 'react-spring';
+import { useSpring, animated } from 'react-spring';
 
 import { Form, Input } from '@rocketseat/unform';
 
@@ -13,6 +13,7 @@ export default function Main() {
   const [resultIsVisible, setResultIsVisible] = useState(false);
 
   function handleSubmit(data) {
+    console.log(data);
     const { start, monthly, time, rentability } = data;
     const adjustedRentability = Number(rentability) / 100;
 
@@ -26,6 +27,8 @@ export default function Main() {
     setResult(
       parseFloat((futureValueWithoutMonthly + monthlyValue).toFixed(2))
     );
+    setTotalInvested(parseFloat(Number(start) + Number(monthly) * time));
+    setEarnings(result - totalInvested);
   }
 
   const opacityProps = useSpring({
@@ -36,8 +39,8 @@ export default function Main() {
     <Container>
       <div className="title-box">
         <h1>
-          Saiba em quanto tempo você se tornaria milionário se conseguisse
-          poupar dinheiro.
+          Saiba em quanto tempo você se tornaria
+          <br /> milionário se conseguisse poupar dinheiro.
         </h1>
       </div>
       <Content>
@@ -80,15 +83,14 @@ export default function Main() {
             autoComplete="off"
           />
 
-          <button
-            type="submit"
-            onClick={() => setResultIsVisible(!resultIsVisible)}
-          >
+          <button type="submit" onClick={() => setResultIsVisible(true)}>
             Calcular
           </button>
         </Form>
 
         <animated.div className="result" style={opacityProps}>
+          <h1>Valor Investido: {totalInvested}</h1>
+          <h1>Recebido em Juros Compostos:{earnings}</h1>
           <h1>Resultado {result}</h1>
         </animated.div>
       </Content>

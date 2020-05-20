@@ -63,6 +63,7 @@ export const Container = styled.div`
       color: #e4d3af;
       font-size: 15px;
       margin-left: 10px;
+      text-align: center;
     }
   }
 `;
@@ -101,6 +102,8 @@ export const Content = styled.div`
   }
 
   div.result {
+    display: flex;
+    flex-direction: column;
     background-image: radial-gradient(
         circle at center center,
         transparent,
@@ -156,7 +159,7 @@ export const Content = styled.div`
     h1 {
       color: #e4d3af;
       font-weight: bold;
-      font-size: 32px;
+      font-size: 24px;
     }
   }
 `;

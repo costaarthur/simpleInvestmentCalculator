@@ -106,9 +106,50 @@ export const Content = styled.div`
     }
   }
 
+  div.notes {
+    display: flex;
+    height: 160px;
+    width: 500px;
+    display: flex;
+    align-items: left;
+    margin: 40px auto;
+    h1 {
+      text-align: left;
+      margin-left: 4px;
+      color: #e4d3af;
+      font-weight: bold;
+      font-size: 14px;
+    }
+  }
+`;
+
+export const Results = styled.div`
+  will-change: transform, opacity;
+  height: 160px;
+  margin: 50px auto 0;
+  background: transparent;
+  background-size: cover;
+  div.resultBack {
+    position: absolute;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    height: 160px;
+    width: 500px;
+    background: transparent;
+  }
   div.result {
+    position: absolute;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
     display: flex;
     flex-direction: column;
+    height: 160px;
+    width: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-image: radial-gradient(
         circle at center center,
         transparent,
@@ -154,13 +195,6 @@ export const Content = styled.div`
         hsl(107, 19%, 100%),
         hsl(107, 19%, 100%)
       );
-
-    height: 160px;
-    width: 500px;
-    display: flex;
-    align-items: left;
-    justify-content: center;
-    margin: 50px auto;
     h1 {
       padding: 4px 20px;
       color: #000;

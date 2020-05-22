@@ -5,7 +5,7 @@ import { useSpring, animated } from 'react-spring';
 import { Form, Input } from '@rocketseat/unform';
 import * as Yup from 'yup';
 
-import { Container, Content } from './styles';
+import { Container, Content, Results } from './styles';
 
 export default function Main() {
   const [result, setResult] = useState(0);
@@ -61,6 +61,12 @@ export default function Main() {
         parseFloat(Number(start) + Number(monthly) * time)
     );
   }
+
+  const { transform, opacity } = useSpring({
+    opacity: resultIsVisible ? 1 : 0,
+    transform: `perspective(600px) rotateX(${resultIsVisible ? 180 : 0}deg)`,
+    config: { mass: 5, tension: 500, friction: 80 },
+  });
 
   const opacityProps = useSpring({
     opacity: resultIsVisible ? 1 : 0,
@@ -119,17 +125,34 @@ export default function Main() {
 
           <button type="submit">Calcular</button>
         </Form>
+        <Results>
+          <animated.div
+            className="resultBack"
+            style={{ opacity: opacity.interpolate(o => 1 - o), transform }}
+          />
+          <animated.div
+            className="result"
+            style={{
+              opacity,
+              transform: transform.interpolate(t => `${t} rotateX(180deg)`),
+            }}
+          >
+            <h1>
+              Valor Investido:{' '}
+              {totalInvested.toLocaleString('pt-BR', numberFormat)}
+            </h1>
+            <h1>
+              Recebido em Juros Compostos:
+              {earnings.toLocaleString('pt-BR', numberFormat)}
+            </h1>
+            <h1>Resultado {result.toLocaleString('pt-BR', numberFormat)}</h1>
+          </animated.div>
+        </Results>
 
-        <animated.div className="result" style={opacityProps}>
+        <animated.div className="notes" style={opacityProps}>
           <h1>
-            Valor Investido:{' '}
-            {totalInvested.toLocaleString('pt-BR', numberFormat)}
+            Nota: O cálculo acima não leva em conta a inflação do período.
           </h1>
-          <h1>
-            Recebido em Juros Compostos:
-            {earnings.toLocaleString('pt-BR', numberFormat)}
-          </h1>
-          <h1>Resultado {result.toLocaleString('pt-BR', numberFormat)}</h1>
         </animated.div>
       </Content>
     </Container>

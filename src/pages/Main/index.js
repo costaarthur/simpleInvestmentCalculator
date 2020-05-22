@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useSpring, animated } from 'react-spring';
 
 import { Form, Input } from '@rocketseat/unform';
+import * as Yup from 'yup';
 
 import { Container, Content } from './styles';
 
@@ -12,9 +13,37 @@ export default function Main() {
   const [earnings, setEarnings] = useState(0);
   const [resultIsVisible, setResultIsVisible] = useState(false);
 
+  const numberFormat = {
+    minimumFractionDigits: 2,
+    style: 'currency',
+    currency: 'BRL',
+  };
+
   function handleSubmit(data) {
-    console.log(data);
     const { start, monthly, time, rentability } = data;
+    const schema = Yup.object().shape({
+      time: Yup.number().required(),
+      rentability: Yup.number(),
+    });
+
+    // schema
+    //   .validate(data, {
+    //     abortEarly: false,
+    //   })
+    //   .catch(console.log('err'));
+
+    // if (schema.isValid(data)) {
+    //   console.log('entrei1');
+    // } else {
+    //   setResultIsVisible(false);
+    //   console.log('entrei2');
+    // }
+
+    // schema.isValid(data).then(valid => {
+    //   console.log('oi');
+    // });
+
+    setResultIsVisible(true);
     const adjustedRentability = Number(rentability) / 100;
 
     const futureValueWithoutMonthly = parseFloat(
@@ -24,11 +53,13 @@ export default function Main() {
       (monthly * ((1 + adjustedRentability) ** time - 1)) / adjustedRentability
     );
 
-    setResult(
-      parseFloat((futureValueWithoutMonthly + monthlyValue).toFixed(2))
-    );
+    setResult(parseFloat(futureValueWithoutMonthly + monthlyValue));
     setTotalInvested(parseFloat(Number(start) + Number(monthly) * time));
-    setEarnings(result - totalInvested);
+
+    setEarnings(
+      parseFloat(futureValueWithoutMonthly + monthlyValue) -
+        parseFloat(Number(start) + Number(monthly) * time)
+    );
   }
 
   const opacityProps = useSpring({
@@ -68,7 +99,7 @@ export default function Main() {
             type="number"
             name="time"
             id="time"
-            placeholder="R$ 00,00"
+            placeholder="120"
             autoComplete="off"
           />
 
@@ -76,22 +107,29 @@ export default function Main() {
             Qual a rentabilidade média esperada ao mês?
           </label>
           <Input
-            // type="number"
+            type="number"
+            pattern="[0-9]+([,\.][0-9]+)?"
+            min="0"
+            step="0.1"
             name="rentability"
             id="rentability"
-            placeholder="3 %"
+            placeholder="0,7 %"
             autoComplete="off"
           />
 
-          <button type="submit" onClick={() => setResultIsVisible(true)}>
-            Calcular
-          </button>
+          <button type="submit">Calcular</button>
         </Form>
 
         <animated.div className="result" style={opacityProps}>
-          <h1>Valor Investido: {totalInvested}</h1>
-          <h1>Recebido em Juros Compostos:{earnings}</h1>
-          <h1>Resultado {result}</h1>
+          <h1>
+            Valor Investido:{' '}
+            {totalInvested.toLocaleString('pt-BR', numberFormat)}
+          </h1>
+          <h1>
+            Recebido em Juros Compostos:
+            {earnings.toLocaleString('pt-BR', numberFormat)}
+          </h1>
+          <h1>Resultado {result.toLocaleString('pt-BR', numberFormat)}</h1>
         </animated.div>
       </Content>
     </Container>

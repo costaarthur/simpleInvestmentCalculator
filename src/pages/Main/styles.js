@@ -80,15 +80,20 @@ export const Content = styled.div`
     }
 
     input {
+      height: 24px;
       border: 0;
       border-bottom: 1px solid #a7a9af;
       margin: 5px 0 16px 0;
+      padding: 0 4px;
+      &::placeholder {
+        color: #999999;
+      }
     }
 
     button {
       border: none;
       background: #e4d3af;
-      color: #fff;
+      color: #000;
       font-weight: bold;
       width: 120px;
       height: 50px;
@@ -150,16 +155,17 @@ export const Content = styled.div`
         hsl(107, 19%, 100%)
       );
 
-    height: 220px;
+    height: 160px;
     width: 500px;
     display: flex;
-    align-items: center;
+    align-items: left;
     justify-content: center;
     margin: 50px auto;
     h1 {
-      color: #e4d3af;
+      padding: 4px 20px;
+      color: #000;
       font-weight: bold;
-      font-size: 24px;
+      font-size: 20px;
     }
   }
 `;
